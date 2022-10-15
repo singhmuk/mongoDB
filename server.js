@@ -1,21 +1,24 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-
 const app = express();
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = "mongodb://localhost:27017/restapi";
+const mongoose = require('mongoose');
+require('dotenv').config();
 
+const ItemsRoutes = require('./routes/aggregation');
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}, err => {
+  if (err) throw err;
+  console.log('Connected to MongoDB')
+})
+
+app.use('/aggregations', ItemsRoutes);
 
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}.`);
-});
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`)
+})
