@@ -1,10 +1,13 @@
-export const AUTH_SIGN_UP = 'AUTH_SIGN_UP';
-export const AUTH_SIGN_OUT = 'AUTH_SIGN_OUT';
-export const AUTH_SIGN_IN = 'AUTH_SIGN_IN';
-export const AUTH_LINK_GOOGLE = 'AUTH_LINK_GOOGLE';
-export const AUTH_LINK_FACEBOOK = 'AUTH_LINK_FACEBOOK';
-export const AUTH_UNLINK_GOOGLE = 'AUTH_UNLINK_GOOGLE';
-export const AUTH_UNLINK_FACEBOOK = 'AUTH_UNLINK_FACEBOOK';
-
-export const AUTH_ERROR = 'AUTH_ERROR';
-export const DASHBOARD_GET_DATA = 'DASHBOARD_GET_DATA';
+export const SET_ALERT = 'SET_ALERT';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const ADD_CONTACT = 'ADD_CONTACT';
+export const CONTACT_ERROR = 'CONTACT_ERROR';
+export const GET_CONTACTS = 'GET_CONTACTS';
+export const LOG_OUT = 'LOG_OUT';
+export const CLEAR_CONTACTS = 'CLEAR_CONTACTS';
+export const SET_CURRENT = 'SET_CURRENT';
+export const CLEAR_CURRENT = 'CLEAR_CURRENT';
+export const UPDATE_CONTACT = 'UPDATE_CONTACT';
+export const FILTER_CONTACTS = 'FILTER_CONTACTS';
+export const CLEAR_FILTER = 'CLEAR_FILTER';
+export const DELETE_CONTACT = 'DELETE_CONTACT';
