@@ -1,50 +1,59 @@
-import "./App.css";
-import { useEffect, useState } from "react";
+import React, { useState } from 'react';
+import ReCAPTCHA from "react-google-recaptcha";
 
-function App() {
-  const [pageNumber, setPageNumber] = useState(0);
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [posts, setPosts] = useState([]);
+const initialState = { name: '', email: '', captcha: '' }
+const App = () => {
+  const [initial, setInitial] = useState(initialState);
 
-  const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
+  const onChange = (value) => {
+    const body = {
+      value,
+      // name, email, captcha
+    }
+    const header = {
+      "Content-Type": "application/json"
+    }
 
-  useEffect(() => {
-    fetch(`http://localhost:4000/posts?page=${pageNumber}`)
-      .then((response) => response.json())
-      .then(({ totalPages, posts }) => {
-        setPosts(posts);
-        setNumberOfPages(totalPages);
-      });
-  }, [pageNumber]);
+    return fetch(`http://localhost:5000/subscribe`, {
+      method: 'POST',
+      header,
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        alert(data.msg);
+        // if (data.success) return location.reload();
+      })
+      .catch(err => console.log(err))
+  }
 
-  const gotoPrevious = () => {
-    setPageNumber(Math.max(0, pageNumber - 1));
-  };
-
-  const gotoNext = () => {
-    setPageNumber(Math.min(numberOfPages - 1, pageNumber + 1));
-  };
-
+  const subscribeForm = (e) => {
+    e.preventDefault();
+    setInitial({ [initial]: e.target.value })
+  }
   return (
-    <div className="App">
-      <h3>Page of {pageNumber + 1}</h3>
-
-      {posts.map((post) => (
-        <div key={post._id} className="post">
-          <h4>{post.title}</h4>
-          <p>{post.text}</p>
+    <div>
+      <h1>Subscribe</h1>
+      <form id="subscribeForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" name="name" id="name" class="form-control" />
         </div>
-      ))}
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" class="form-control" />
+        </div>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+      </form>
 
-      <button onClick={gotoPrevious}>Previous</button>
-      {pages.map((pageIndex) => (
-        <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
-          {pageIndex + 1}
-        </button>
-      ))}
-      <button onClick={gotoNext}>Next</button>
+      <ReCAPTCHA
+        className="g-recaptcha"
+        sitekey="6LdpvDEUAAAAAMy8x0y8PS99j4BavfO2oBdVTQGZ"
+        onChange={onChange}
+      />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
