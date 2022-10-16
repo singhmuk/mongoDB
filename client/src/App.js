@@ -1,59 +1,50 @@
 import React, { useState } from 'react';
-import ReCAPTCHA from "react-google-recaptcha";
+import StripeCheckout from 'react-stripe-checkout';
 
-const initialState = { name: '', email: '', captcha: '' }
-const App = () => {
-  const [initial, setInitial] = useState(initialState);
+function App() {
 
-  const onChange = (value) => {
+  const [product, setProduct] = useState({
+    name: "Reactjs",
+    price: 10,
+    productBy: 'Facebook'
+  })
+
+  const makePayment = token => {
     const body = {
-      value,
-      // name, email, captcha
+      token,
+      product
     }
     const header = {
       "Content-Type": "application/json"
     }
 
-    return fetch(`http://localhost:5000/subscribe`, {
+    return fetch(`http://localhost:5000/payment`, {
       method: 'POST',
       header,
       body: JSON.stringify(body)
+    }).then(res => {
+      console.log('Response', res)
+      const { status } = res;
+      console.log('Status', status)
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        alert(data.msg);
-        // if (data.success) return location.reload();
-      })
       .catch(err => console.log(err))
   }
 
-  const subscribeForm = (e) => {
-    e.preventDefault();
-    setInitial({ [initial]: e.target.value })
-  }
   return (
-    <div>
-      <h1>Subscribe</h1>
-      <form id="subscribeForm">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" name="name" id="name" class="form-control" />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="text" name="email" id="email" class="form-control" />
-        </div>
-        <input type="submit" value="Submit" class="btn btn-primary" />
-      </form>
-
-      <ReCAPTCHA
-        className="g-recaptcha"
-        sitekey="6LdpvDEUAAAAAMy8x0y8PS99j4BavfO2oBdVTQGZ"
-        onChange={onChange}
+    <div className="App">
+      Stripe
+      <StripeCheckout
+        //Publishable key
+        // stripeKey={process.env.REACT_APP_KEY}
+        stripeKey="pk_test_51He1P4Jz7nbfLVoYDBP7q8kVxEZLjLd34krGafVPawZ4PIkziUVjrOyzePVtXM3rkRoo04sVfvFjBuRZehSWy8Xu00kIVA41KE"
+        token={makePayment}
+        amount={product.price * 100}
+        name="Reactjs"
+        shippingAddress
+        billingAddress
       />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
