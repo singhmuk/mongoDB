@@ -1,0 +1,7 @@
+To update user credentials:
+PUT: localhost:5000/users/6358f62a4a923146538c4626
+    {
+        "userId":"6358f62a4a923146538c4626",
+        "username":"AdminUpdates",
+        "password":"123456"
+    }
